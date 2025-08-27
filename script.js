@@ -1,5 +1,6 @@
+//Heartcount incresses when heart icon click
 function heartCount() {
-  let heartCount = parseInt(document.getElementById("heart-count").innerText);
+  let heartCount = document.getElementById("heart-count").innerText;
   const heartIcons = document.querySelectorAll(".heart-icon");
 
   for (const heartIcon of heartIcons) {
@@ -11,8 +12,10 @@ function heartCount() {
 }
 heartCount();
 
+//call btn function (alert and show the subtitle and number discress coin add to the history section)
 function callButton() {
   const callBtns = document.querySelectorAll(".btn-call");
+  const historyContainer = document.getElementById("history-container");
 
   for (const callBtn of callBtns) {
     callBtn.addEventListener("click", function () {
@@ -25,10 +28,7 @@ function callButton() {
         alert(`📞 Calling ${serviceSubTitle} ${serviceNumber}...`);
       }
 
-      const coinCount = parseInt(
-        document.getElementById("coin-count").innerText
-      );
-
+      const coinCount = document.getElementById("coin-count").innerText;
       function coinCountFunc() {
         let count = 20;
         document.getElementById("coin-count").innerText = coinCount - count;
@@ -37,6 +37,8 @@ function callButton() {
       if (coinCount >= 20) {
         callFunc();
         coinCountFunc();
+        history(serviceTitle, serviceNumber);
+        clearHistory(historyContainer);
       } else {
         alert("❌ আপনার পর্যাপ্ত কয়েন নেই। কল করতে কমপক্ষে ২০ টি কয়েন লাগবে।");
       }
@@ -66,26 +68,11 @@ function callButton() {
             </div>
         `;
         historyContainer.appendChild(newHistory);
-        console.log(serviceTitle, serviceNumber, newHistory, historyContainer);
       }
-      history(serviceTitle, serviceNumber);
-    });
-  }
-  const historyContainer = document.getElementById("history-container");
-  clearHistory(historyContainer);
-}
-
-function copyButton() {
-  const copyButtons = document.querySelectorAll(".copy-btn");
-  let count = 0;
-  for (const copyBtn of copyButtons) {
-    copyBtn.addEventListener("click", function () {
-      count++;
-      document.getElementById("copyCount").innerText = count;
     });
   }
 }
-copyButton();
+callButton();
 
 function clearHistory(historyContainer) {
   const clearBtn = document.getElementById("clear-history");
@@ -94,4 +81,19 @@ function clearHistory(historyContainer) {
   });
 }
 
-callButton();
+function copyButton() {
+  const copyButtons = document.querySelectorAll(".copy-btn");
+  let count = 0;
+  for (const copyBtn of copyButtons) {
+    const parent = copyBtn.parentElement.parentElement;
+    const serviceNumber = parent.querySelector(".service-number").innerText;
+    copyBtn.addEventListener("click", function () {
+      navigator.clipboard.writeText(serviceNumber).then(function () {
+        alert(`নম্বর কপি হয়েছে ${serviceNumber}`);
+      });
+      count++;
+      document.getElementById("copyCount").innerText = count;
+    });
+  }
+}
+copyButton();
